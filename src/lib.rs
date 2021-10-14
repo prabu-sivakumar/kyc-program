@@ -62,31 +62,24 @@ pub fn process_instruction(
         return Err(ProgramError::IncorrectProgramId);
     }
     
-    let memo = String::from_utf8(instruction_data.to_vec()).map_err(|_err| {
+    let data = String::from_utf8(instruction_data.to_vec()).map_err(|_err| {
                     msg!("Invalid UTF-8, from byte {}");
                                 ProgramError::InvalidInstructionData
     })?;
 
-    let iter = memo.chars();
-    let slice = iter.as_str();
-    let txt_final = String::from(slice);
-
-    msg!("Request Payload is {}",txt_final);
-
-    let customer: CustomerData = serde_json::from_str(&txt_final).unwrap();
+    let payload = String::from(data.chars().as_str());
+    msg!("Request Payload is {}",payload);
+    let customer: CustomerData = serde_json::from_str(&payload).unwrap();
     
     match customer.instruction.as_ref() {
-    
         "POST" => {
             msg!("POST Operation");  
              Ok(())
-           },
-          
+           },          
           "GET" => {
             msg!("GET Operation");
              Ok(())
            },
-           
            "PUT" => {
             msg!("PUT Operation");
              Ok(())
