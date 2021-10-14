@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use borsh::{BorshDeserialize,BorshSerialize};
 
 #[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize,Clone)]
-pub struct customer_data {
+pub struct CustomerData {
     pub instruction: String,
     pub legal_name: String,
     pub registration_number: String,
@@ -51,7 +51,7 @@ pub fn process_instruction(
 
     msg!("Request Payload is {}",txt_final);
 
-    let customer: customer_data = serde_json::from_str(&txt_final).unwrap();
+    let customer: CustomerData = serde_json::from_str(&txt_final).unwrap();
     
     match customer.instruction.as_ref() {
     

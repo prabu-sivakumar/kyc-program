@@ -23,5 +23,5 @@ solana-sdk = "=1.7.11"
 solana-validator = "=1.7.11"
 
 [lib]
-name = "CustomerData"
+name = "customer-data"
 crate-type = ["cdylib", "lib"]
