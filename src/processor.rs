@@ -1,3 +1,5 @@
+use borsh::{BorshDeserialize, BorshSerialize};
+use serde::{Deserialize, Serialize};
 use solana_program::borsh::try_from_slice_unchecked;
 use solana_program::{
     account_info::{next_account_info, AccountInfo},
@@ -8,14 +10,11 @@ use solana_program::{
     pubkey::Pubkey,
 };
 
-use crate::{
-    error::CustomerDataError, state::CustomerData, state::CustomerDataList
-};
+use crate::{error::CustomerDataError, state::CustomerData, state::CustomerDataList};
 
-entrypoint!(process_instruction);
 pub struct Processor;
 impl Processor {
-    pub fn process_instruction(
+    pub fn process(
         program_id: &Pubkey,
         accounts: &[AccountInfo],
         instruction_data: &[u8],
@@ -71,7 +70,7 @@ impl Processor {
         msg!("Adding Customer Data {:?}", &customers);
         customers.data.push(customer);
     }
-    
+
     pub fn update_customer(customer: CustomerData, customers: &mut CustomerDataList) {
         if customer.customer_id == "" || customer.lei == "" {
             msg!("Matching Customer Data Not Found");
@@ -87,5 +86,4 @@ impl Processor {
             customers.data[position].kyc_status = customer.kyc_status;
         }
     }
-    
 }
