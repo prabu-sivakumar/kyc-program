@@ -35,9 +35,11 @@ pub struct AddressData {
 #[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize, Clone)]
 pub struct KycDocument {
     pub document_id: String,
-    pub document_type: String,
     pub document_name: String,
-    pub document_transaction_id: String,
+    pub document_category: String,
+    pub document_status: String,
+    pub last_modified: String,
+    pub ipfs_transaction_id: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize, Clone)]
