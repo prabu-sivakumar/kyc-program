@@ -22,6 +22,28 @@ pub struct CustomerData {
     pub primary_isic_code: String,
     pub entity_type: String,
     pub swift_code: String,
+    pub kyc_status: bool,
+    pub addresses: Vec<AddressData>,
+    pub kyc_documents: Vec<KycDocument>
+}
+
+#[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize,Clone)]
+pub struct AddressData {
+    pub address_type: String,
+    pub address_line1: String,
+    pub address_line2: String,
+    pub city: String,
+    pub state: String,
+    pub country: String,
+    pub postal_code: String
+}
+
+#[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize,Clone)]
+pub struct KycDocument {
+    pub document_id: String,
+    pub document_type: String,
+    pub document_name: String,
+    pub document_transaction_id: String
 }
 
 entrypoint!(process_instruction);
