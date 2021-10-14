@@ -1,9 +1,5 @@
 use borsh::{BorshDeserialize, BorshSerialize};
 use serde::{Deserialize, Serialize};
-use solana_program::{
-    program_error::ProgramError,
-    pubkey::Pubkey,
-};
 
 #[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize, Clone)]
 pub struct CustomerData {
