@@ -1,5 +1,6 @@
 use borsh::{BorshDeserialize, BorshSerialize};
 use serde::{Deserialize, Serialize};
+use solana_program::borsh::try_from_slice_unchecked;
 use solana_program::{
     account_info::{next_account_info, AccountInfo},
     entrypoint,
@@ -12,6 +13,7 @@ use solana_program::{
 #[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize, Clone)]
 pub struct CustomerData {
     pub instruction: String,
+    pub customer_id: String,
     pub legal_name: String,
     pub registration_number: String,
     pub incorporation_country: String,
@@ -94,7 +96,7 @@ pub fn process_instruction(
         "UpdateKycStatus" => {
             msg!("Updating Customer Data");
             let mut customers = try_from_slice_unchecked(&account.data.borrow()[..])?;
-            update_customer(inv_object, &mut customers);
+            update_customer(customer, &mut customers);
             msg!("Account Data updated as {:?}", &customers);
             Ok(BorshSerialize::serialize(
                 &customers,
@@ -111,10 +113,10 @@ pub fn create_customer(customer: CustomerData, customers: &mut CustomerDataList)
 }
 
 pub fn update_customer(customer: CustomerData, customers: &mut CustomerDataList) {
-    if customer.customer_id == "" || cus.lei == "" {
+    if customer.customer_id == "" || customer.lei == "" {
         msg!("Matching Customer Data Not Found");
     } else {
-        let position = existing_data
+        let position = customers
             .data
             .iter()
             .position(|index| {
