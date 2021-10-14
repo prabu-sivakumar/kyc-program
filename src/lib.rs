@@ -50,7 +50,7 @@ pub struct KycDocument {
 
 #[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize, Clone)]
 pub struct CustomerDataList {
-    pub customers: Vec<CustomerData>,
+    pub data: Vec<CustomerData>,
 }
 
 entrypoint!(process_instruction);
