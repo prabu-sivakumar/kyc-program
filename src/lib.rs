@@ -124,6 +124,6 @@ pub fn update_customer(customer: CustomerData, customers: &mut CustomerDataList)
             })
             .unwrap();
         msg!("Matching Customer Data Found in Position {}", position);
-        existing_data.data[position].kyc_status = customer.kyc_status;
+        customers.data[position].kyc_status = customer.kyc_status;
     }
 }
