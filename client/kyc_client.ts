@@ -18,7 +18,7 @@ let connection: Connection;
 let payer: Keypair;
 let programId: PublicKey;
 let kycPubKey: PublicKey;
-const PROGRAM_PATH = path.resolve(__dirname, '../../dist/program');
+const PROGRAM_PATH = path.resolve(__dirname, '../dist/program');
 
 const PROGRAM_SO_PATH = path.join(PROGRAM_PATH, 'kyc.so');
 const
@@ -115,7 +115,7 @@ export async function checkProgram(): Promise<void> {
     } catch (err) {
         const errMsg = (err as Error).message;
         throw new Error(
-            `Failed to read program keypair at '${PROGRAM_KEYPAIR_PATH}' due to error: ${errMsg}. Program may need to be deployed with \`solana program deploy dist/program/dockyc.so\``,
+            `Failed to read program keypair at '${PROGRAM_KEYPAIR_PATH}' due to error: ${errMsg}. Program may need to be deployed with \`solana program deploy target/deploy/kyc.so\``,
         );
     }
     
