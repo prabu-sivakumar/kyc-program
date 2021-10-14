@@ -93,11 +93,11 @@ pub fn process_instruction(
         }
         "UpdateKycStatus" => {
             msg!("Updating Customer Data");
-            let mut existing_data = try_from_slice_unchecked(&account.data.borrow()[..])?;
-            update_data(inv_object, &mut existing_data);
-            msg!("Account Data updated as {:?}", &existing_data);
+            let mut customers = try_from_slice_unchecked(&account.data.borrow()[..])?;
+            update_customer(inv_object, &mut customers);
+            msg!("Account Data updated as {:?}", &customers);
             Ok(BorshSerialize::serialize(
-                &existing_data,
+                &customers,
                 &mut &mut account.data.borrow_mut()[..],
             )?)
         }
@@ -110,7 +110,7 @@ pub fn create_customer(customer: CustomerData, customers: &mut CustomerDataList)
     customers.data.push(customer);
 }
 
-pub fn update_data(customer: CustomerData, customers: &mut CustomerDataList) {
+pub fn update_customer(customer: CustomerData, customers: &mut CustomerDataList) {
     if customer.customer_id == "" || cus.lei == "" {
         msg!("Matching Customer Data Not Found");
     } else {
@@ -122,6 +122,6 @@ pub fn update_data(customer: CustomerData, customers: &mut CustomerDataList) {
             })
             .unwrap();
         msg!("Matching Customer Data Found in Position {}", position);
-        existing_data.data[position].kyc_status = inv_object.kyc_status;
+        existing_data.data[position].kyc_status = customer.kyc_status;
     }
 }
