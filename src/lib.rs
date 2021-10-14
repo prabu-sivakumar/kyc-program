@@ -6,12 +6,11 @@ use solana_program::{
     program_error::ProgramError,
     pubkey::Pubkey,
 };
-use solana_program::borsh::try_from_slice_unchecked;
 use serde::{Deserialize, Serialize};
 use borsh::{BorshDeserialize,BorshSerialize};
 
 #[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize,Clone)]
-pub struct CustomerData {
+pub struct customer_data {
     pub instruction: String,
     pub legal_name: String,
     pub registration_number: String,
@@ -52,9 +51,9 @@ pub fn process_instruction(
 
     msg!("Request Payload is {}",txt_final);
 
-    let inv_object: CustomerData = serde_json::from_str(&txt_final).unwrap();
+    let customer: customer_data = serde_json::from_str(&txt_final).unwrap();
     
-    match inv_object.instruction.as_ref() {
+    match customer.instruction.as_ref() {
     
         "POST" => {
             msg!("POST Operation");  
