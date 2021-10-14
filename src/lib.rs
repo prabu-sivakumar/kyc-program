@@ -1,54 +1,76 @@
 use solana_program::{
-    account_info::AccountInfo, entrypoint, entrypoint::ProgramResult, msg, pubkey::Pubkey,
+    account_info::{next_account_info, AccountInfo},
+    entrypoint,
+    entrypoint::ProgramResult,
+    msg,
+    program_error::ProgramError,
+    pubkey::Pubkey,
 };
+use solana_program::borsh::try_from_slice_unchecked;
+use serde::{Deserialize, Serialize};
+use borsh::{BorshDeserialize,BorshSerialize};
+
+#[derive(Debug, Deserialize, Serialize, BorshDeserialize, BorshSerialize,Clone)]
+pub struct CustomerData {
+    pub instruction: String,
+    pub legal_name: String,
+    pub registration_number: String,
+    pub incorporation_country: String,
+    pub lei_registration_status: String,
+    pub lei: String,
+    pub incorporation_date: String,
+    pub primary_country_operation: String,
+    pub primary_isic_code: String,
+    pub entity_type: String,
+    pub swift_code: String,
+}
 
 entrypoint!(process_instruction);
-fn process_instruction(
-    program_id: &Pubkey,
+
+pub fn process_instruction(
+    program_id: &Pubkey, 
     accounts: &[AccountInfo],
     instruction_data: &[u8],
 ) -> ProgramResult {
-    msg!(
-        "process_instruction: {}: {} accounts, data={:?}",
-        program_id,
-        accounts.len(),
-        instruction_data
-    );
-    Ok(())
-}
+    msg!("Processing Customer Data");
+    let accounts_iter = &mut accounts.iter();
+    let account = next_account_info(accounts_iter)?;
 
-#[cfg(test)]
-mod test {
-    use {
-        super::*,
-        assert_matches::*,
-        solana_program::instruction::{AccountMeta, Instruction},
-        solana_program_test::*,
-        solana_sdk::{signature::Signer, transaction::Transaction},
-    };
-
-    #[tokio::test]
-    async fn test_transaction() {
-        let program_id = Pubkey::new_unique();
-
-        let (mut banks_client, payer, recent_blockhash) = ProgramTest::new(
-            "bpf_program_template",
-            program_id,
-            processor!(process_instruction),
-        )
-        .start()
-        .await;
-
-        let mut transaction = Transaction::new_with_payer(
-            &[Instruction {
-                program_id,
-                accounts: vec![AccountMeta::new(payer.pubkey(), false)],
-                data: vec![1, 2, 3],
-            }],
-            Some(&payer.pubkey()),
-        );
-        transaction.sign(&[&payer], recent_blockhash);
-
-        assert_matches!(banks_client.process_transaction(transaction).await, Ok(()));
+    if account.owner != program_id {
+        msg!("Invalid Program Id");
+        return Err(ProgramError::IncorrectProgramId);
     }
+    
+    let memo = String::from_utf8(instruction_data.to_vec()).map_err(|_err| {
+                    msg!("Invalid UTF-8, from byte {}");
+                                ProgramError::InvalidInstructionData
+    })?;
+
+    let iter = memo.chars();
+    let slice = iter.as_str();
+    let txt_final = String::from(slice);
+
+    msg!("Request Payload is {}",txt_final);
+
+    let inv_object: CustomerData = serde_json::from_str(&txt_final).unwrap();
+    
+    match inv_object.instruction.as_ref() {
+    
+        "POST" => {
+            msg!("POST Operation");  
+             Ok(())
+           },
+          
+          "GET" => {
+            msg!("GET Operation");
+             Ok(())
+           },
+           
+           "PUT" => {
+            msg!("PUT Operation");
+             Ok(())
+           } 
+           _ => Ok(())
+     }
+    
 }

@@ -1,5 +1,5 @@
 [package]
-name = "bpf-program-template"
+name = "kyc-program"
 version = "0.1.0"
 edition = "2018"
 license = "WTFPL"
@@ -7,6 +7,11 @@ publish = false
 
 [dependencies]
 solana-program = "=1.7.11"
+borsh = "0.9.1"
+borsh-derive = "0.9.1"
+serde="1.0"
+serde_json="1.0"
+serde_derive="1.0"
 
 [features]
 test-bpf = []
@@ -18,4 +23,5 @@ solana-sdk = "=1.7.11"
 solana-validator = "=1.7.11"
 
 [lib]
+name = "CustomerData"
 crate-type = ["cdylib", "lib"]
