@@ -18,7 +18,7 @@ let connection: Connection;
 let payer: Keypair;
 let programId: PublicKey;
 let kycPubKey: PublicKey;
-const PROGRAM_PATH = path.resolve(__dirname, '../dist/program');
+const PROGRAM_PATH = path.resolve(__dirname, '../target/deploy');
 
 const PROGRAM_SO_PATH = path.join(PROGRAM_PATH, 'kyc.so');
 const
