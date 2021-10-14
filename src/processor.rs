@@ -1,5 +1,5 @@
 use borsh::{BorshSerialize};
-use serde_json::from_str;
+use serde::{Serialize, Deserialize};
 use solana_program::borsh::try_from_slice_unchecked;
 use solana_program::{
     account_info::{next_account_info, AccountInfo},
